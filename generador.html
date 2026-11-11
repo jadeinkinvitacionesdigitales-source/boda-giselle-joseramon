@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es" translate="no" class="notranslate">
+<head>
+<meta charset="utf-8">
+<meta name="google" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Generador de invitaciones | Giselle &amp; Joseramon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;1,400&family=Cormorant+Garamond:wght@300;400&family=Italiana&family=Jost:wght@300;400&family=Pinyon+Script&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilos.css">
+<style>
+  /* Página privada para los novios: no aparece en el menú de la web */
+  .gen { max-width: 640px; margin: 0 auto; padding: 0 16px 60px; }
+  .gen .formulario { margin-top: 30px; }
+  .gen-fila { display: grid; grid-template-columns: 1fr 140px; gap: 20px; }
+  .gen-resultado {
+    margin-top: 40px;
+    padding: 26px 24px;
+    border: 1px solid var(--taupe-claro);
+    background: #fbf9f1;
+  }
+  .gen-resultado h2, .gen-lista h2 {
+    font: 400 13px var(--f-menu);
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--texto);
+    margin-bottom: 12px;
+  }
+  .gen-enlace {
+    font: 14px var(--f-menu);
+    word-break: break-all;
+    color: var(--oliva);
+    background: var(--fondo);
+    padding: 10px 12px;
+    user-select: all;
+  }
+  .gen-mensaje {
+    white-space: pre-line;
+    font: 15px/1.6 var(--f-menu);
+    color: var(--texto-suave);
+    margin-top: 16px;
+  }
+  .gen-botones { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .gen-botones .boton, .gen-botones .copiar { margin: 0; }
+  .boton.whatsapp { background: #2f7d4f; }
+  .boton.whatsapp:hover { background: var(--fucsia); }
+  .gen-lista { margin-top: 50px; }
+  .gen-total { font: 14px var(--f-menu); color: var(--texto-suave); margin-bottom: 14px; }
+  .gen-total strong { color: var(--oliva); font-weight: 400; font-size: 18px; }
+  .gen-tabla { width: 100%; border-collapse: collapse; font: 14px var(--f-menu); color: var(--texto-suave); }
+  .gen-tabla th { text-align: left; font-weight: 400; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--texto); padding: 8px 6px; border-bottom: 1px solid var(--taupe-claro); }
+  .gen-tabla td { padding: 10px 6px; border-bottom: 1px solid #e6dfcb; vertical-align: middle; }
+  .gen-tabla td.num { text-align: center; font-variant-numeric: tabular-nums; }
+  .gen-tabla button { background: none; border: 0; cursor: pointer; font: 12px var(--f-menu); color: var(--oliva); text-decoration: underline; padding: 4px; }
+  .gen-tabla button.quitar { color: var(--texto); }
+  .gen-vacio { font-style: italic; font-family: var(--f-italica); color: var(--texto); }
+  .gen-nota { font: 13px/1.6 var(--f-menu); color: var(--texto); margin-top: 14px; }
+  @media (max-width: 600px) { .gen-fila { grid-template-columns: 1fr 100px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="monograma" href="index.html"><img src="img/logo-taupe.png" alt="Giselle y Joseramon"></a>
+</header>
+
+<h1 class="titulo-pagina">INVITACIONES</h1>
+<p class="aviso-rsvp">Escribe a quién invitas y cuántos puestos le reservas. Se crea su enlace personal.</p>
+
+<main class="gen">
+  <form class="formulario" id="gen-form">
+    <div class="gen-fila">
+      <div>
+        <label for="gen-nombre">Nombre del invitado</label>
+        <input id="gen-nombre" type="text" placeholder="Ej.: Familia Pérez" required autocomplete="off">
+      </div>
+      <div>
+        <label for="gen-puestos">Puestos</label>
+        <input id="gen-puestos" type="number" min="1" max="20" value="2" required>
+      </div>
+    </div>
+    <button class="boton" type="submit">Crear invitación</button>
+  </form>
+
+  <section class="gen-resultado" id="gen-resultado" hidden>
+    <h2>Enlace de la invitación</h2>
+    <p class="gen-enlace" id="gen-enlace"></p>
+    <p class="gen-mensaje" id="gen-mensaje"></p>
+    <div class="gen-botones">
+      <a class="boton whatsapp" id="gen-whatsapp" href="#" target="_blank" rel="noopener">Enviar por WhatsApp</a>
+      <button class="copiar" type="button" id="gen-copiar-mensaje">Copiar mensaje</button>
+      <button class="copiar" type="button" id="gen-copiar-enlace">Copiar enlace</button>
+      <a class="copiar" id="gen-ver" href="#" target="_blank" rel="noopener" style="text-decoration:none">Ver invitación</a>
+    </div>
+  </section>
+
+  <section class="gen-lista">
+    <h2>Invitaciones creadas</h2>
+    <p class="gen-total" id="gen-total"></p>
+    <div style="overflow-x:auto">
+      <table class="gen-tabla">
+        <thead><tr><th>Invitado</th><th style="text-align:center">Puestos</th><th></th></tr></thead>
+        <tbody id="gen-filas"></tbody>
+      </table>
+    </div>
+    <p class="gen-nota">Esta lista se guarda solo en este navegador. Si cambias de celular o computadora no la verás, pero los enlaces que ya enviaste siguen funcionando.</p>
+  </section>
+</main>
+
+<footer>Giselle y Joseramon 2027</footer>
+
+<script>
+  // Dirección pública de la web
+  const WEB = 'https://giselleyjoseramon.jadeink.online/';
+  const CLAVE = 'invitaciones-creadas';
+
+  // Nombre y puestos van codificados en el enlace (?i=…), los lee invitacion.js
+  function codificar(nombre, puestos) {
+    return btoa(unescape(encodeURIComponent(nombre + '|' + puestos)))
+      .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+  function enlace(nombre, puestos) { return WEB + '?i=' + codificar(nombre, puestos); }
+  function puestosTexto(n) { return n === 1 ? '1 puesto' : n + ' puestos'; }
+  function mensaje(nombre, puestos) {
+    return '¡Hola, ' + nombre + '!\n\n' +
+      'Con mucha alegría te invitamos a nuestra boda el sábado 29 de mayo de 2027 a las 6:00 pm.\n\n' +
+      'Hemos reservado ' + puestosTexto(puestos) + ' en tu honor.\n\n' +
+      'Aquí encontrarás toda la información y podrás confirmar tu asistencia:\n' +
+      enlace(nombre, puestos) + '\n\n' +
+      'Con cariño,\nGiselle y Joseramon';
+  }
+
+  function cargar() {
+    try { return JSON.parse(localStorage.getItem(CLAVE)) || []; } catch (e) { return []; }
+  }
+  function guardar(lista) {
+    try { localStorage.setItem(CLAVE, JSON.stringify(lista)); } catch (e) {}
+  }
+
+  async function copiar(texto, boton, etiqueta) {
+    try {
+      await navigator.clipboard.writeText(texto);
+      boton.textContent = '¡Copiado!';
+    } catch (e) {
+      boton.textContent = 'Selecciona y copia';
+    }
+    setTimeout(() => boton.textContent = etiqueta, 2000);
+  }
+
+  let actual = null;
+  function mostrar(nombre, puestos) {
+    actual = { nombre, puestos };
+    const url = enlace(nombre, puestos);
+    document.getElementById('gen-enlace').textContent = url;
+    document.getElementById('gen-mensaje').textContent = mensaje(nombre, puestos);
+    document.getElementById('gen-whatsapp').href = 'https://wa.me/?text=' + encodeURIComponent(mensaje(nombre, puestos));
+    document.getElementById('gen-ver').href = url;
+    const caja = document.getElementById('gen-resultado');
+    caja.hidden = false;
+    caja.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function pintarLista() {
+    const lista = cargar();
+    const filas = document.getElementById('gen-filas');
+    filas.innerHTML = '';
+    if (!lista.length) {
+      filas.innerHTML = '<tr><td colspan="3" class="gen-vacio">Todavía no has creado invitaciones.</td></tr>';
+    }
+    lista.forEach((inv, i) => {
+      const tr = document.createElement('tr');
+      const td = document.createElement('td'); td.textContent = inv.nombre;
+      const num = document.createElement('td'); num.className = 'num'; num.textContent = inv.puestos;
+      const acciones = document.createElement('td'); acciones.style.textAlign = 'right';
+      const ver = document.createElement('button'); ver.type = 'button'; ver.textContent = 'Ver enlace';
+      ver.onclick = () => mostrar(inv.nombre, inv.puestos);
+      const quitar = document.createElement('button'); quitar.type = 'button'; quitar.className = 'quitar'; quitar.textContent = 'Quitar';
+      quitar.onclick = () => { const l = cargar(); l.splice(i, 1); guardar(l); pintarLista(); };
+      acciones.append(ver, quitar);
+      tr.append(td, num, acciones);
+      filas.append(tr);
+    });
+    const total = lista.reduce((s, inv) => s + inv.puestos, 0);
+    document.getElementById('gen-total').innerHTML =
+      'Total: <strong>' + total + '</strong> ' + (total === 1 ? 'puesto' : 'puestos') +
+      ' en <strong>' + lista.length + '</strong> ' + (lista.length === 1 ? 'invitación' : 'invitaciones');
+  }
+
+  document.getElementById('gen-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const nombre = document.getElementById('gen-nombre').value.trim();
+    const puestos = Math.max(1, Math.min(20, parseInt(document.getElementById('gen-puestos').value, 10) || 1));
+    if (!nombre) return;
+    const lista = cargar();
+    const existente = lista.find(inv => inv.nombre.toLowerCase() === nombre.toLowerCase());
+    if (existente) existente.puestos = puestos; else lista.push({ nombre, puestos });
+    guardar(lista);
+    pintarLista();
+    mostrar(nombre, puestos);
+    document.getElementById('gen-nombre').value = '';
+    document.getElementById('gen-nombre').focus();
+  });
+
+  document.getElementById('gen-copiar-mensaje').addEventListener('click', (e) => {
+    if (actual) copiar(mensaje(actual.nombre, actual.puestos), e.target, 'Copiar mensaje');
+  });
+  document.getElementById('gen-copiar-enlace').addEventListener('click', (e) => {
+    if (actual) copiar(enlace(actual.nombre, actual.puestos), e.target, 'Copiar enlace');
+  });
+
+  pintarLista();
+</script>
+</body>
+</html>

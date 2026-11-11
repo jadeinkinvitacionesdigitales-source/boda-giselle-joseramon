@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es" translate="no" class="notranslate">
+<head>
+<meta charset="utf-8">
+<meta name="google" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RSVP | Giselle &amp; Joseramon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;1,400&family=Cormorant+Garamond:wght@300;400&family=Italiana&family=Jost:wght@300;400&family=Pinyon+Script&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<header>
+  <a class="monograma" href="index.html"><img src="img/logo-taupe.png" alt="Giselle y Joseramon"></a>
+  <button class="menu-boton" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu">
+    <span></span><span></span><span></span>
+  </button>
+  <nav id="menu">
+    <ul>
+      <li><a href="index.html">Nuestra boda</a></li>
+      <li><a href="historia.html">Nuestra historia</a></li>
+      <li><a href="informacion.html">Información</a></li>
+      <li><a href="regalos.html">Regalos</a></li>
+      <li><a href="rsvp.html" class="activo">RSVP</a></li>
+    </ul>
+  </nav>
+</header>
+
+<h1 class="titulo-pagina">CONFIRMA TU ASISTENCIA</h1>
+<p class="aviso-rsvp">Por favor confirma antes del 29 de marzo de 2027</p>
+<!-- Pase del invitado: solo aparece si entró con su enlace personal (ver generador.html) -->
+<div class="pase" data-inv-bloque hidden>
+  <p class="pase-texto">Hemos reservado <strong data-inv="puestos"></strong> en su honor</p>
+</div>
+
+<main class="rsvp">
+  <img src="img/rsvp.jpg" alt="Giselle y Joseramon">
+
+  <div>
+    <!-- Las respuestas se guardan en Google Sheets (dirección en config.js) y se ven en panel.html -->
+    <form class="formulario" id="rsvp">
+      <div>
+        <label for="nombre">Nombre</label>
+        <input id="nombre" name="nombre" type="text" required autocomplete="name">
+      </div>
+
+      <div>
+        <label>¿Asistirás?</label>
+        <div class="opciones">
+          <label><input type="radio" name="asistira" value="Sí" required><span>Sí, ahí estaré</span></label>
+          <label><input type="radio" name="asistira" value="No"><span>No podré ir</span></label>
+        </div>
+      </div>
+
+      <div>
+        <label for="invitados">Número de personas</label>
+        <input id="invitados" name="invitados" type="number" min="1" max="10" value="1">
+      </div>
+
+      <div>
+        <label for="mensaje">Mensaje para Giselle y Joseramon</label>
+        <textarea id="mensaje" name="mensaje"></textarea>
+      </div>
+
+      <button class="boton" type="submit" id="rsvp-enviar">Enviar</button>
+      <p class="rsvp-error" id="rsvp-error" hidden>No pudimos enviar tu respuesta. Revisa tu conexión e inténtalo de nuevo.</p>
+    </form>
+
+    <p class="gracias-rsvp" id="gracias">¡Gracias! Recibimos tu respuesta.</p>
+  </div>
+</main>
+
+<footer>Giselle y Joseramon 2027</footer>
+
+<script src="config.js"></script>
+<script>
+  const form = document.getElementById('rsvp');
+  const boton = document.getElementById('rsvp-enviar');
+  const error = document.getElementById('rsvp-error');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    error.hidden = true;
+    boton.disabled = true;
+    boton.textContent = 'Enviando…';
+
+    const datos = new URLSearchParams(new FormData(form));
+    if (datos.get('asistira') === 'No') datos.set('invitados', '0');
+
+    try {
+      if (window.CONFIG && CONFIG.rsvpUrl) {
+        // Google Apps Script no devuelve permisos CORS al enviar, por eso "no-cors"
+        await fetch(CONFIG.rsvpUrl, { method: 'POST', mode: 'no-cors', body: datos });
+      }
+      form.hidden = true;
+      document.getElementById('gracias').style.display = 'block';
+    } catch (err) {
+      error.hidden = false;
+      boton.disabled = false;
+      boton.textContent = 'Enviar';
+    }
+  });
+
+  // Si no asistirá, no hace falta el número de personas
+  form.querySelectorAll('input[name="asistira"]').forEach(r => r.addEventListener('change', () => {
+    const no = form.asistira.value === 'No';
+    const campo = document.getElementById('invitados');
+    campo.disabled = no;
+    campo.closest('div').style.opacity = no ? .4 : 1;
+  }));
+</script>
+
+<script src="invitacion.js"></script>
+<script src="menu.js"></script>
+</body>
+</html>

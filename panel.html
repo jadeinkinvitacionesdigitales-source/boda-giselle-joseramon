@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es" translate="no" class="notranslate">
+<head>
+<meta charset="utf-8">
+<meta name="google" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Confirmaciones | Giselle &amp; Joseramon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;1,400&family=Cormorant+Garamond:wght@300;400&family=Italiana&family=Jost:wght@300;400&family=Pinyon+Script&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilos.css">
+<style>
+  /* Página privada para los novios: no aparece en el menú de la web */
+  .panel { max-width: 900px; margin: 0 auto; padding: 0 16px 60px; }
+  .panel h2 {
+    font: 400 13px var(--f-menu);
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--texto);
+    margin: 50px 0 14px;
+  }
+  .panel-entrar { max-width: 360px; margin: 30px auto 0; }
+  .panel-aviso { font: 14px/1.6 var(--f-menu); color: var(--fucsia); margin-top: 12px; }
+  .panel-barra { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; margin-top: 20px; }
+  .panel-barra p { font: 13px var(--f-menu); color: var(--texto); }
+
+  .cifras { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 20px; }
+  .cifra { border: 1px solid var(--taupe-claro); padding: 18px 12px; text-align: center; }
+  .cifra strong { display: block; font: 300 44px/1 "Cormorant Garamond", serif; color: var(--oliva); font-variant-numeric: lining-nums; }
+  .cifra.no strong { color: var(--fucsia); }
+  .cifra span { display: block; margin-top: 8px; font: 11px var(--f-menu); letter-spacing: .14em; text-transform: uppercase; color: var(--texto); }
+
+  .filtros { display: flex; gap: 8px; flex-wrap: wrap; }
+  .filtros button {
+    background: none; border: 1px solid var(--taupe-claro); color: var(--texto-suave);
+    font: 12px var(--f-menu); letter-spacing: .1em; text-transform: uppercase;
+    padding: 8px 14px; cursor: pointer;
+  }
+  .filtros button[aria-pressed="true"] { background: var(--oliva); border-color: var(--oliva); color: #fff; }
+
+  .tabla { width: 100%; border-collapse: collapse; font: 14px var(--f-menu); color: var(--texto-suave); }
+  .tabla th { text-align: left; font-weight: 400; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--texto); padding: 8px 8px; border-bottom: 1px solid var(--taupe-claro); white-space: nowrap; }
+  .tabla td { padding: 12px 8px; border-bottom: 1px solid #e6dfcb; vertical-align: top; }
+  .tabla td.num { text-align: center; font-variant-numeric: tabular-nums; }
+  .estado { display: inline-block; padding: 3px 10px; font-size: 12px; border-radius: 999px; white-space: nowrap; }
+  .estado.si { background: #e3e8d2; color: var(--oliva); }
+  .estado.no { background: #f6dde7; color: var(--fucsia); }
+  .fecha-celda { font-size: 12px; color: var(--texto); white-space: nowrap; }
+  .vacio { font-family: var(--f-italica); font-style: italic; color: var(--texto); padding: 20px 8px; }
+
+  .mensajes { display: grid; gap: 14px; }
+  .mensaje {
+    border-left: 2px solid var(--naranja);
+    padding: 6px 0 6px 16px;
+  }
+  .mensaje p { font: italic 17px/1.6 var(--f-italica); color: var(--texto-suave); white-space: pre-line; }
+  .mensaje span { display: block; margin-top: 4px; font: 12px var(--f-menu); letter-spacing: .1em; text-transform: uppercase; color: var(--texto); }
+
+  .pendientes { font: 14px/1.9 var(--f-menu); color: var(--texto-suave); columns: 2; }
+  .nota { font: 13px/1.6 var(--f-menu); color: var(--texto); margin-top: 10px; }
+  @media (max-width: 600px) {
+    .cifras { grid-template-columns: repeat(2, 1fr); }
+    .pendientes { columns: 1; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="monograma" href="index.html"><img src="img/logo-taupe.png" alt="Giselle y Joseramon"></a>
+</header>
+
+<h1 class="titulo-pagina">CONFIRMACIONES</h1>
+
+<main class="panel">
+
+  <!-- Paso 1: clave -->
+  <form class="formulario panel-entrar" id="entrar">
+    <div>
+      <label for="clave">Clave del panel</label>
+      <input id="clave" type="password" required autocomplete="current-password">
+    </div>
+    <button class="boton" type="submit">Ver confirmaciones</button>
+    <p class="panel-aviso" id="aviso" hidden></p>
+  </form>
+
+  <!-- Paso 2: datos -->
+  <div id="datos" hidden>
+    <div class="panel-barra">
+      <p id="actualizado"></p>
+      <div class="filtros">
+        <button type="button" id="recargar">Actualizar</button>
+        <button type="button" id="salir">Salir</button>
+      </div>
+    </div>
+
+    <div class="cifras">
+      <div class="cifra"><strong id="c-personas">0</strong><span>Personas asisten</span></div>
+      <div class="cifra"><strong id="c-si">0</strong><span>Confirmaron que sí</span></div>
+      <div class="cifra no"><strong id="c-no">0</strong><span>No podrán ir</span></div>
+      <div class="cifra"><strong id="c-mensajes">0</strong><span>Mensajes</span></div>
+    </div>
+
+    <h2>Respuestas</h2>
+    <div class="filtros" role="group" aria-label="Filtrar respuestas">
+      <button type="button" data-filtro="todas" aria-pressed="true">Todas</button>
+      <button type="button" data-filtro="Sí" aria-pressed="false">Asisten</button>
+      <button type="button" data-filtro="No" aria-pressed="false">No asisten</button>
+    </div>
+    <div style="overflow-x:auto; margin-top:14px">
+      <table class="tabla">
+        <thead><tr><th>Nombre</th><th>Respuesta</th><th style="text-align:center">Personas</th><th style="text-align:center">Puestos</th><th>Fecha</th></tr></thead>
+        <tbody id="filas"></tbody>
+      </table>
+    </div>
+    <p class="nota">Si alguien respondió más de una vez, cuenta solo su última respuesta.</p>
+
+    <h2>Mensajes para Giselle y Joseramon</h2>
+    <div class="mensajes" id="mensajes"></div>
+
+    <div id="bloque-pendientes" hidden>
+      <h2>Sin responder</h2>
+      <ul class="pendientes" id="pendientes" style="list-style:none"></ul>
+      <p class="nota">Según las invitaciones creadas en el generador desde este mismo navegador.</p>
+    </div>
+  </div>
+</main>
+
+<footer>Giselle y Joseramon 2027</footer>
+
+<script src="config.js"></script>
+<script>
+  const CLAVE_GUARDADA = 'panel-clave';
+  let respuestas = [];
+  let filtro = 'todas';
+
+  const $ = id => document.getElementById(id);
+  function guardar(k, v) { try { v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (e) {} }
+  function leer(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function fechaCorta(iso) {
+    const d = new Date(iso);
+    return isNaN(d) ? '' : d.toLocaleDateString('es-PA', { day: 'numeric', month: 'short' }) + ' ' +
+      d.toLocaleTimeString('es-PA', { hour: 'numeric', minute: '2-digit' });
+  }
+  function avisar(texto) { $('aviso').textContent = texto; $('aviso').hidden = false; }
+
+  // Deja solo la última respuesta de cada nombre
+  function ultimas(filas) {
+    const porNombre = new Map();
+    filas.forEach(f => porNombre.set(f.nombre.trim().toLowerCase(), f));
+    return [...porNombre.values()].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+  }
+
+  function pintar() {
+    const si = respuestas.filter(r => r.asistira === 'Sí');
+    const no = respuestas.filter(r => r.asistira === 'No');
+    const conMensaje = respuestas.filter(r => r.mensaje && r.mensaje.trim());
+    $('c-personas').textContent = si.reduce((s, r) => s + (r.personas || 0), 0);
+    $('c-si').textContent = si.length;
+    $('c-no').textContent = no.length;
+    $('c-mensajes').textContent = conMensaje.length;
+
+    const tbody = $('filas');
+    tbody.innerHTML = '';
+    const lista = filtro === 'todas' ? respuestas : respuestas.filter(r => r.asistira === filtro);
+    if (!lista.length) {
+      tbody.innerHTML = '<tr><td colspan="5" class="vacio">Todavía no hay respuestas aquí.</td></tr>';
+    }
+    lista.forEach(r => {
+      const tr = document.createElement('tr');
+      const celdas = [
+        r.nombre,
+        null,
+        r.asistira === 'Sí' ? r.personas : '—',
+        r.puestos || '—',
+        fechaCorta(r.fecha)
+      ];
+      celdas.forEach((valor, i) => {
+        const td = document.createElement('td');
+        if (i === 1) {
+          const e = document.createElement('span');
+          e.className = 'estado ' + (r.asistira === 'Sí' ? 'si' : 'no');
+          e.textContent = r.asistira === 'Sí' ? 'Asiste' : 'No asiste';
+          td.append(e);
+        } else {
+          td.textContent = valor;
+        }
+        if (i === 2 || i === 3) td.className = 'num';
+        if (i === 4) td.className = 'fecha-celda';
+        tr.append(td);
+      });
+      tbody.append(tr);
+    });
+
+    const caja = $('mensajes');
+    caja.innerHTML = '';
+    if (!conMensaje.length) caja.innerHTML = '<p class="vacio">Todavía no hay mensajes.</p>';
+    conMensaje.forEach(r => {
+      const div = document.createElement('div'); div.className = 'mensaje';
+      const p = document.createElement('p'); p.textContent = r.mensaje;
+      const firma = document.createElement('span'); firma.textContent = r.nombre;
+      div.append(p, firma); caja.append(div);
+    });
+
+    // Invitados del generador que aún no han respondido
+    let creadas = [];
+    try { creadas = JSON.parse(leer('invitaciones-creadas')) || []; } catch (e) {}
+    const respondieron = new Set(respuestas.map(r => r.nombre.trim().toLowerCase()));
+    const faltan = creadas.filter(i => !respondieron.has(i.nombre.trim().toLowerCase()));
+    $('bloque-pendientes').hidden = !creadas.length;
+    $('pendientes').innerHTML = '';
+    faltan.forEach(i => {
+      const li = document.createElement('li');
+      li.textContent = i.nombre + ' · ' + (i.puestos === 1 ? '1 puesto' : i.puestos + ' puestos');
+      $('pendientes').append(li);
+    });
+    if (creadas.length && !faltan.length) $('pendientes').innerHTML = '<li class="vacio">¡Todos respondieron!</li>';
+  }
+
+  async function cargar(clave) {
+    if (!window.CONFIG || !CONFIG.rsvpUrl) {
+      avisar('Falta conectar Google Sheets: pega la dirección del Apps Script en config.js.');
+      return false;
+    }
+    try {
+      const r = await fetch(CONFIG.rsvpUrl + '?clave=' + encodeURIComponent(clave));
+      const json = await r.json();
+      if (!json.ok) { avisar('Clave incorrecta.'); return false; }
+      respuestas = ultimas(json.filas || []);
+      $('entrar').hidden = true;
+      $('datos').hidden = false;
+      $('actualizado').textContent = 'Actualizado ' + fechaCorta(new Date().toISOString());
+      pintar();
+      return true;
+    } catch (e) {
+      avisar('No se pudo cargar. Revisa tu conexión e inténtalo de nuevo.');
+      return false;
+    }
+  }
+
+  $('entrar').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    $('aviso').hidden = true;
+    const clave = $('clave').value.trim();
+    if (await cargar(clave)) guardar(CLAVE_GUARDADA, clave);
+  });
+  $('recargar').addEventListener('click', () => cargar(leer(CLAVE_GUARDADA) || ''));
+  $('salir').addEventListener('click', () => {
+    guardar(CLAVE_GUARDADA, null);
+    $('datos').hidden = true; $('entrar').hidden = false; $('clave').value = '';
+  });
+  document.querySelectorAll('[data-filtro]').forEach(b => b.addEventListener('click', () => {
+    filtro = b.dataset.filtro;
+    document.querySelectorAll('[data-filtro]').forEach(x => x.setAttribute('aria-pressed', x === b));
+    pintar();
+  }));
+
+  // Si ya entró antes en este navegador, carga directo
+  const guardada = leer(CLAVE_GUARDADA);
+  if (guardada) cargar(guardada);
+</script>
+</body>
+</html>

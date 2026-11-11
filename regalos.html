@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es" translate="no" class="notranslate">
+<head>
+<meta charset="utf-8">
+<meta name="google" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REGALOS | Giselle &amp; Joseramon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;1,400&family=Cormorant+Garamond:wght@300;400&family=Italiana&family=Jost:wght@300;400&family=Pinyon+Script&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<header>
+  <a class="monograma" href="index.html"><img src="img/logo-taupe.png" alt="Giselle y Joseramon"></a>
+  <button class="menu-boton" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu">
+    <span></span><span></span><span></span>
+  </button>
+  <nav id="menu">
+    <ul>
+      <li><a href="index.html">Nuestra boda</a></li>
+      <li><a href="historia.html">Nuestra historia</a></li>
+      <li><a href="informacion.html">Información</a></li>
+      <li><a href="regalos.html" class="activo">Regalos</a></li>
+      <li><a href="rsvp.html">RSVP</a></li>
+    </ul>
+  </nav>
+</header>
+
+<h1 class="titulo-pagina">REGALOS</h1>
+
+<main class="contenido">
+
+  <section class="bloque">
+    <h2>Lluvia de sobres</h2>
+    <p>Tendremos una lluvia de sobres el día de la recepción.</p>
+    <p>¡Gracias por tu cariño!</p>
+  </section>
+
+  <section class="bloque">
+    <h2>Transferencia bancaria</h2>
+    <p>Si lo prefieres, también puedes hacer una transferencia:</p>
+    <div class="cuenta">
+      <p>Giselle del Carmen Martínez Correa</p>
+      <p class="numero" id="numero-cuenta">0403000093342</p>
+      <p>Banco General</p>
+      <p>Cuenta de ahorros</p>
+      <button class="copiar" type="button" id="copiar">Copiar número</button>
+    </div>
+  </section>
+
+</main>
+
+<footer>Giselle y Joseramon 2027</footer>
+
+<script>
+  // Copia el número de cuenta al portapapeles
+  document.getElementById('copiar').addEventListener('click', async (e) => {
+    const numero = document.getElementById('numero-cuenta').textContent;
+    try {
+      await navigator.clipboard.writeText(numero);
+      e.target.textContent = '¡Copiado!';
+    } catch (err) {
+      e.target.textContent = numero;
+    }
+    setTimeout(() => e.target.textContent = 'Copiar número', 2000);
+  });
+</script>
+
+<script src="invitacion.js"></script>
+<script src="menu.js"></script>
+</body>
+</html>

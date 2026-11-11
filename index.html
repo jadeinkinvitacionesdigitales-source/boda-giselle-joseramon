@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es" translate="no" class="notranslate">
+<head>
+<meta charset="utf-8">
+<meta name="google" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NUESTRA BODA | Giselle &amp; Joseramon</title>
+<meta name="description" content="Nuestra boda · 29.05.2027">
+<!-- Vista previa al compartir el enlace (WhatsApp necesita la dirección completa de la imagen) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="NUESTRA BODA | Giselle &amp; Joseramon">
+<meta property="og:description" content="Nuestra boda · 29.05.2027">
+<meta property="og:image" content="https://giselleyjoseramon.jadeink.online/img/compartir.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;1,400&family=Cormorant+Garamond:wght@300;400&family=Italiana&family=Jost:wght@300;400&family=Pinyon+Script&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<!-- ============================================================
+     EDITA LOS TEXTOS DIRECTAMENTE AQUÍ ABAJO.
+     Para poner tus fotos: cambia cada <div class="foto-vacia">…</div>
+     por <img src="tu-foto.jpg" alt="…">
+     ============================================================ -->
+
+<header>
+  <a class="monograma" href="index.html"><img src="img/logo-taupe.png" alt="Giselle y Joseramon"></a>
+  <button class="menu-boton" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="menu">
+    <span></span><span></span><span></span>
+  </button>
+  <nav id="menu">
+    <ul>
+      <li><a href="index.html" class="activo">Nuestra boda</a></li>
+      <li><a href="historia.html">Nuestra historia</a></li>
+      <li><a href="informacion.html">Información</a></li>
+      <li><a href="regalos.html">Regalos</a></li>
+      <li><a href="rsvp.html">RSVP</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section class="hero">
+
+  <div class="hero-foto">
+    <img src="img/portada-principal.jpg" alt="Giselle y Joseramon">
+    <p class="frase-foto" aria-label="It was always you"><span class="ff-1">It was</span><span class="ff-2">Always You</span></p>
+  </div>
+</section>
+
+<section class="nombres">
+  <h1>GISELLE<span class="y">&amp;</span>JOSERAMON</h1>
+  <p class="fecha">29.05.2027</p>
+  <p class="gracias">Después de 12 años de compartir sueños, aventuras y vivir tantos momentos inolvidables, nos hace mucha ilusión celebrar contigo este nuevo capítulo en nuestras vidas.</p>
+
+  <!-- Cuenta regresiva: la fecha y hora están en data-fecha (hora de Panamá, -05:00) -->
+  <div class="cuenta-regresiva" id="cuenta" data-fecha="2027-05-29T18:00:00-05:00" aria-live="polite">
+    <div><span id="cr-dias">0</span><small>Días</small></div>
+    <div><span id="cr-horas">0</span><small>Horas</small></div>
+    <div><span id="cr-min">0</span><small>Minutos</small></div>
+    <div><span id="cr-seg">0</span><small>Segundos</small></div>
+  </div>
+</section>
+
+<section class="galeria">
+  <div class="galeria-fotos">
+    <img src="img/galeria-1.jpg" alt="Giselle y Joseramon de viaje">
+    <img src="img/galeria-2.jpg" alt="Giselle y Joseramon en la Plaza de San Pedro">
+  </div>
+</section>
+
+<section class="itinerario">
+  <!-- Ilustración opcional (mascota, flores, monograma…) -->
+  <img class="mascota" src="img/logo-taupe.png" alt="">
+
+  <div class="evento">
+    <h2>DÍA DE LA BODA</h2>
+    <p class="dia">Sábado 29 de mayo de 2027</p>
+
+    <div class="momento">
+      <h3>Ceremonia</h3>
+      <p>Iglesia La Merced, Casco Antiguo<br>6:00 pm</p>
+      <a class="boton" href="https://www.google.com/maps/search/?api=1&amp;query=Iglesia+La+Merced+Casco+Antiguo+Panama" target="_blank" rel="noopener">Cómo llegar</a>
+    </div>
+
+    <div class="momento" style="margin-top:48px">
+      <h3>Recepción</h3>
+      <p>Hotel InterContinental Miramar<br>Salón Grand Ballroom<br>Después de la ceremonia</p>
+      <a class="boton" href="https://www.google.com/maps/search/?api=1&amp;query=Hotel+InterContinental+Miramar+Panama" target="_blank" rel="noopener">Cómo llegar</a>
+    </div>
+  </div>
+</section>
+
+<footer>Giselle y Joseramon 2027</footer>
+
+<script>
+  // Cuenta regresiva hasta la boda
+  (function () {
+    const caja = document.getElementById('cuenta');
+    const meta = new Date(caja.dataset.fecha).getTime();
+    const campos = ['cr-dias', 'cr-horas', 'cr-min', 'cr-seg'].map(id => document.getElementById(id));
+    function actualizar() {
+      const falta = meta - Date.now();
+      if (falta <= 0) {
+        caja.innerHTML = '<p class="cr-final">¡Hoy es el gran día!</p>';
+        clearInterval(reloj);
+        return;
+      }
+      const s = Math.floor(falta / 1000);
+      const valores = [Math.floor(s / 86400), Math.floor(s / 3600) % 24, Math.floor(s / 60) % 60, s % 60];
+      campos.forEach((c, i) => c.textContent = i === 0 ? valores[i] : String(valores[i]).padStart(2, '0'));
+    }
+    const reloj = setInterval(actualizar, 1000);
+    actualizar();
+  })();
+</script>
+
+<script src="invitacion.js"></script>
+<script src="menu.js"></script>
+</body>
+</html>
